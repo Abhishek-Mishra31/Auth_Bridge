@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Employee Login</title>
+</head>
+
+<body style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #ddc268; margin: 0; padding: 0;">
+
+    <div
+        style="max-width: 500px; margin: 60px auto; background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+        <h2 style="text-align: center; color: #856404;">Employee Login</h2>
+
+        <form id="employeeLoginForm" style="margin-top: 30px;">
+            <label style="font-weight: bold;">Name:</label><br>
+            <input type="text" id="name" required
+                style="width: 100%; padding: 10px; margin: 5px 0 15px; border: 1px solid #ccc; border-radius: 5px;"><br>
+
+            <label style="font-weight: bold;">Password:</label><br>
+            <input type="password" id="password" required
+                style="width: 100%; padding: 10px; margin: 5px 0 25px; border: 1px solid #ccc; border-radius: 5px;"><br>
+
+            <button type="submit"
+                style="width: 100%; background: #ffc107; color: black; border: none; padding: 12px; font-size: 16px; border-radius: 5px; cursor: pointer;">
+                Login
+            </button>
+        </form>
+
+        <div id="employeeLoginResult" style="margin-top: 25px; text-align: center; font-weight: bold; color: #333;">
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("employeeLoginForm").addEventListener("submit", async function (e) {
+            e.preventDefault();
+            const name = document.getElementById("name").value;
+            const password = document.getElementById("password").value;
+
+            const res = await fetch("loginEmployee", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name, password })
+            });
+
+            const data = await res.json()
+
+            document.getElementById("employeeLoginResult").innerHTML = `
+  <p style="margin-bottom: 8px;"><strong>${data.success}</strong></p>
+  <p>Your token is:</p>
+  <div style="background: #f4f4f4; padding: 10px; border-radius: 5px; word-break: break-all; font-family: monospace; font-size: 14px; color: #333;">
+    ${data.token}
+  </div>
+  <p style="margin-top: 15px;"><strong>Employee Details:</strong></p>
+  <ul style="list-style: none; padding-left: 0; font-size: 15px;">
+    <li><strong>Name:</strong> ${data.employee.name}</li>
+    <li><strong>Position:</strong> ${data.employee.position}</li>
+    <li><strong>Salary:</strong> ₹${data.employee.salary}</li>
+  </ul>
+`;
+        });
+    </script>
+
+</body>
+
+</html>

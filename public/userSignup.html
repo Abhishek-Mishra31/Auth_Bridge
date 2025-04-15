@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>User Signup</title>
+</head>
+
+<body style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f2f2f2; margin: 0; padding: 0;">
+
+    <div
+        style="max-width: 500px; margin: 60px auto; background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+        <h2 style="text-align: center; color: #28a745;">User Signup</h2>
+
+        <form id="signupForm" style="margin-top: 30px;">
+            <label style="font-weight: bold;">Name:</label><br>
+            <input type="text" id="name" required
+                style="width: 100%; padding: 10px; margin-top: 5px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px;"><br>
+
+            <label style="font-weight: bold;">Email:</label><br>
+            <input type="email" id="email" required
+                style="width: 100%; padding: 10px; margin-top: 5px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px;"><br>
+
+            <label style="font-weight: bold;">Password:</label><br>
+            <input type="password" id="password" required
+                style="width: 100%; padding: 10px; margin-top: 5px; margin-bottom: 25px; border: 1px solid #ccc; border-radius: 5px;"><br>
+
+            <button type="submit"
+                style="width: 100%; background: #28a745; color: white; border: none; padding: 12px; font-size: 16px; border-radius: 5px; cursor: pointer;">
+                Sign Up
+            </button>
+        </form>
+
+        <div id="signupResult" style="margin-top: 25px; text-align: center; font-weight: bold; color: #333;"></div>
+    </div>
+
+    <script>
+        document.getElementById("signupForm").addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            const name = document.getElementById("name").value;
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+
+            const res = await fetch("/user/signup", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ name, email, password })
+            });
+
+            const data = await res.json();
+            document.getElementById("signupResult").innerHTML = `
+  <p style="margin-bottom: 8px;"><strong>${data.success}</strong></p>
+  <p>Your token is:</p>
+  <div style="background: #f4f4f4; padding: 10px; border-radius: 5px; word-break: break-all; font-family: monospace; font-size: 14px; color: #333;">
+    ${data.token}
+  </div>
+`;
+        });
+    </script>
+
+</body>
+
+</html>
